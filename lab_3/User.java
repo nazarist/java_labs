@@ -32,9 +32,15 @@ public class User
 
     private String[] getUser()
     {
-        String line = CrudDb.get(this.currentPosition);
+        String line = get();
         assert line != null;
         return line.split(" ");
+    }
+
+
+    public String get()
+    {
+        return CrudDb.get(this.currentPosition);
     }
 
     private void update(String[] arrData)
@@ -70,6 +76,7 @@ public class User
     public void updateEmail()
     {
         Scanner sc = new Scanner(System.in);
+        System.out.print("Email: ");
         String newEmail = sc.nextLine();
 
 
@@ -108,7 +115,7 @@ public class User
         userFromFile[PASS_POSITION] = Security.hashMake(newPass);
 
         update(userFromFile);
-        System.out.print("password changed ;)");
+        System.out.println("password changed ;)");
     }
 
 

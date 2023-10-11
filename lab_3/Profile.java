@@ -18,9 +18,7 @@ public class Profile
     public static User guest()
     {
         Scanner scanner = new Scanner(System.in);
-
         boolean repeat = true;
-
 
         while (repeat){
             Helpers.out( "========{----}=========",
@@ -33,16 +31,13 @@ public class Profile
             System.out.print("Chose: ");
 
             switch (scanner.nextLine()) {
-                case "1" -> {
-                    return Model.userLoginProcess();
-                }
-                case "2" -> {
-                    return Model.userRegisterProcess();
-                }
-                case "3" -> repeat = false;
+                case "1" -> {return Model.userLoginProcess();}
+                case "2" -> {return Model.userRegisterProcess();}
+                case "3" -> System.exit(0);
                 default -> Helpers.out("is not correct");
             }
         }
+
 
         return null;
     }
@@ -50,14 +45,12 @@ public class Profile
 
     public static void auth(User user)
     {
-        Profile.user = user;
-
         Scanner scanner = new Scanner(System.in);
         boolean repeat = true;
 
 
         while (repeat){
-            if (user != null) return;
+            if (Profile.user == null) return;
 
             Helpers.out( Helpers.lineWithUsers(user),
                     " -> Chose number: ",
@@ -72,15 +65,18 @@ public class Profile
 
             switch (scanner.nextLine()) {
                 case "1" -> changeCredentials(user);
-                case "2" -> {
-                    Helpers.out(
+                case "2" ->
+                        Helpers.out("+-----------------------------+",
                             "name: " + user.getName(),
-                            "email: " + user.getEmail()
-                    );
-                }
+                            "email: " + user.getEmail(),
+                            "+-----------------------------+"
+                        );
                 case "3" -> Database.printDb();
-                case "4" -> user = null;
-                case "5" -> repeat = false;
+                case "4" -> {
+                    Profile.user = null;
+                    System.out.println(" -> logout is successful ;)");
+                }
+                case "5" -> System.exit(0);
                 default -> Helpers.out("is not correct");
             }
         }
@@ -94,7 +90,7 @@ public class Profile
 
         while (repeat){
             Helpers.out( Helpers.lineWithUsers(user),
-                    " -> what you want a change: ",
+                    " -> what do you want a change: ",
                     " -> name - 1",
                     " -> email - 2",
                     " -> password - 3",
@@ -110,6 +106,8 @@ public class Profile
                 case "4" -> repeat = false;
                 default -> Helpers.out("is not correct");
             }
+            Helpers.out(
+                    user.get());
         }
     }
 

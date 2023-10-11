@@ -4,6 +4,8 @@ import java.io.RandomAccessFile;
 
 public class CrudDb extends Database
 {
+
+    public static final int LEN = 130;
     public static String buildLine(String[] words)
     {
         StringBuilder line = new StringBuilder();
@@ -14,9 +16,33 @@ public class CrudDb extends Database
 
         return line.toString();
     }
+
+
+    public static int checkLen(String line)
+    {
+        return LEN - line.length();
+    }
+
+
+    public static boolean lenError(String line)
+    {
+        if (checkLen(line) < 0){
+            System.out.println("very long");
+            return false;
+        }
+        return true;
+    }
+
     public static void insert(String... words)
     {
-        Database.set(buildLine(words));
+        String line = buildLine(words);
+        StringBuilder builder = new StringBuilder(line);
+
+        while (LEN > builder.length()){
+            builder.append(' ');
+        }
+
+        Database.set(builder.toString());
     }
 
 
@@ -60,8 +86,16 @@ public class CrudDb extends Database
     {
         if (position == -1) return;
         try (RandomAccessFile file = new RandomAccessFile(Database.file, "rw")) {
-            file.seek(position);
-            file.writeBytes(newLine);
+            if (lenError(newLine)){
+                file.seek(position);
+                StringBuilder paddedLine = new StringBuilder(newLine);
+
+                while (LEN - 1  > paddedLine.length()) {
+                    paddedLine.append(' ');
+                }
+
+                file.writeBytes(paddedLine.toString());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

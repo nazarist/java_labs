@@ -53,7 +53,7 @@ public class Model
 
         String[] arrData;
         while (true) {
-            System.out.print("Password for -> " + name + ":");
+            System.out.print("Password for -> " + name + ": ");
             String password = sc.nextLine();
 
             arrData = CrudDb.get(position).split(" ");
