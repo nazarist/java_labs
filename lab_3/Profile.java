@@ -104,11 +104,9 @@ public class Profile
             System.out.print("Chose: ");
 
             switch (scanner.nextLine()) {
-                case "1" -> {
-                    user.updateName(scanner.nextLine());
-                }
-                case "2" ->
-                case "2" ->
+                case "1" -> user.updateName();
+                case "2" -> user.updateEmail();
+                case "3" -> user.updatePass();
                 case "4" -> repeat = false;
                 default -> Helpers.out("is not correct");
             }

@@ -1,3 +1,5 @@
+import java.util.Scanner;
+
 public class User
 {
     private String name;
@@ -35,7 +37,7 @@ public class User
         return line.split(" ");
     }
 
-    private void insert(String[] arrData)
+    private void update(String[] arrData)
     {
         String line = CrudDb.buildLine(arrData);
 
@@ -43,32 +45,70 @@ public class User
     }
 
 
-    public void updateName(String name)
+    public void updateName()
     {
+        Scanner sc = new Scanner(System.in);
+
+        while (true){
+            System.out.print("Name: ");
+            name = sc.nextLine();
+            if (CrudDb.findPositionByName(name) == -1)
+            {
+                break;
+            }
+            System.out.println("name is exist!!!");
+        }
+
         String[] arrData = getUser();
         arrData[NAME_POSITION] = name;
 
-        insert(arrData);
+        update(arrData);
         this.name = name;
     }
 
 
-    public void updateEmail(String email)
+    public void updateEmail()
     {
-        String[] arrData = getUser();
-        arrData[EMAIL_POSITION] = email;
+        Scanner sc = new Scanner(System.in);
+        String newEmail = sc.nextLine();
 
-        insert(arrData);
+
+        String[] arrData = getUser();
+        arrData[EMAIL_POSITION] = newEmail;
+
+        update(arrData);
         this.email = email;
     }
 
 
-    public void updatePass(String password)
-    {
-        String[] arrData = getUser();
-        arrData[PASS_POSITION] = Security.hashMake(password);
 
-        insert(arrData);
+    public void updatePass()
+    {
+        Scanner sc = new Scanner(System.in);
+        String[] arrData;
+
+        while (true) {
+            System.out.print("Password for -> " + name + ": ");
+            String password = sc.nextLine();
+
+            String passwordFromFile = CrudDb.get(this.currentPosition).split(" ")[User.PASS_POSITION];
+
+            if (!Security.hashCheck(password, passwordFromFile)) {
+                System.out.println("This password is incorrect!");
+                continue;
+            }
+            break;
+        }
+
+        System.out.print("print new password for -> " + name + ": ");
+        String newPass = sc.nextLine();
+
+
+        String[] userFromFile = this.getUser();
+        userFromFile[PASS_POSITION] = Security.hashMake(newPass);
+
+        update(userFromFile);
+        System.out.print("password changed ;)");
     }
 
 
